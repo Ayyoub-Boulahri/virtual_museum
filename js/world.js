@@ -133,11 +133,9 @@ class World extends Simu {
         //     ;
             
 
-        const pendule = this.createEntity("pendule", ENTITIES.pendule, { y: 4.5, x: 20 });        
-        // Hall, against the wall between the doors of Salle I and Salle II,
-        // facing +x (the hall); its back (0.4 deep) touches the wall at x = 0.1
         const horloge = this.createEntity("horloge", ENTITIES.horloge, { x: 0.5, y: 0, z: 5, rotY: -Math.PI / 2 });
 
+        this.placerVisiteurs(6);
 
         // =========================
         // 4) Objets procéduraux conservés depuis ton world.js
@@ -156,6 +154,46 @@ class World extends Simu {
         // sph_b.position.y = 0.5 + offsetY;
         // PRIMS.creuser(sphere_b, sph_b);
 
+    }
+
+    placerVisiteurs(n) {
+        const guide = { x: 9.8, z: -2.0 };
+        const libre = (x, z) =>
+            !(Math.abs(x - 7) < 2.3 && Math.abs(z) < 2.3) &&           // statue
+            !(x < 8.0 && z > 11.5) &&                                  // stairs
+            !(x < 2.0 && Math.abs(z - 5) < 1.2) &&                     // clock
+            !(Math.abs(x - 7.5) < 1.9 && Math.abs(z + 10.5) < 1.0) &&  // bench
+            Math.hypot(x - 10, z - 5) > 1.5;                           // camera start
+
+        const places = [guide];
+        for (let essai = 0; places.length < n + 1 && essai < 1000; essai++) {
+            const x = 1.5 + Math.random() * 12.5;
+            const z = -14 + Math.random() * 28;
+            if (libre(x, z) && places.every((p) => Math.hypot(x - p.x, z - p.z) > 1.2)) {
+                places.push({ x, z });
+            }
+        }
+
+        // rotation.y (in degrees) that makes +Z look from p towards cible
+        const vers = (p, cible) => Math.atan2(cible.x - p.x, cible.z - p.z) * 180 / Math.PI;
+
+        const visiteurs = places.slice(1);
+        const centre = {
+            x: visiteurs.reduce((s, p) => s + p.x, 0) / visiteurs.length,
+            z: visiteurs.reduce((s, p) => s + p.z, 0) / visiteurs.length,
+        };
+
+        this.createEntity("guide", ENTITIES.entity, {})
+            .add(COMPS.guide, {})
+            .add(COMPS.position, { x: guide.x, z: guide.z })
+            .add(COMPS.rotation, { y: vers(guide, centre) });
+
+        visiteurs.forEach((p, i) => {
+            this.createEntity("visiteur" + i, ENTITIES.entity, {})
+                .add(COMPS.visiteur, {})
+                .add(COMPS.position, { x: p.x, z: p.z })
+                .add(COMPS.rotation, { y: vers(p, guide) });
+        });
     }
 
     createAssets() {

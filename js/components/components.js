@@ -28,6 +28,9 @@ import {Rebond}         from  './rebond.js' ;
 
 import {Lumiere}        from  './lumiere.js' ; 
 
+import {Guide}          from  './guide.js' ; 
+import {Visiteur}       from  './visiteur.js' ; 
+
 
 
 
@@ -51,6 +54,8 @@ const COMPS = {
     rebond         : Rebond,
     //appear         : Appear,
     lumiere        : Lumiere,
+    guide          : Guide,
+    visiteur       : Visiteur,
 
     lookAtForward  : LookAtForward,
 

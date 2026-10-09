@@ -273,6 +273,7 @@ class Horloge extends Entity {
             materiauTige: matOr,
             materiauMasse: matOr
         }, sim);
+        
         // in phase with the time: the bob passes the middle when the seconds hand ticks
         this.pendule.t = this.temps % this.pendule.T;
 
@@ -284,6 +285,7 @@ class Horloge extends Entity {
 
         this.afficherHeure();
     }
+
 
     // Babylon is left-handed: a negative rotation about Z turns clockwise
     // for a viewer facing the dial.

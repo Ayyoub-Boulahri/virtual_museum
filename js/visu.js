@@ -35,7 +35,8 @@ class Visu {
         		const dt = that.engine.getDeltaTime()/1000.0 ; 
         		that.clock += dt ; 
         		that.update(dt) ; 
-				that.teleport();
+				// teleport() disabled: its zone was the doorway of Salle II, and the stairs now reach the mezzanine
+				// that.teleport();
         		that.scene.render() ; 
     		});
 	}
