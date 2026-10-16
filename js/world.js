@@ -15,87 +15,87 @@ const VERS_PX = Math.PI / 2;   // regarde vers +x
 const VERS_MX = -Math.PI / 2;  // regarde vers -x
 
 const ACCROCHAGE = [
-  // ---- Salle I (ouest, z de 5 à 15) : Paris, capitale des arts
-  { id: "modigliani_hebuterne", x: -13.3, y: 2.3, z: 5.18, rot: VERS_PZ, h: 1.7 },
-  { id: "soutine_groom", x: -12.5, y: 2.3, z: 14.87, rot: VERS_MZ, h: 1.6 },
-  { id: "valadon_chambre_bleue", x: -8.3, y: 2.3, z: 14.87, rot: VERS_MZ, h: 1.45 },
-  { id: "bonnard_petit_poucet", x: -3.9, y: 2.3, z: 14.87, rot: VERS_MZ, h: 1.45 },
-  { id: "gris_arlequin", x: -14.87, y: 2.3, z: 7.9, rot: VERS_PX, h: 1.7 },
-  { id: "delaunay_tour_eiffel", x: -14.87, y: 2.3, z: 12.1, rot: VERS_PX, h: 1.9 },
-  { id: "modigliani_lunia", x: -0.18, y: 2.3, z: 6.5, rot: VERS_MX, h: 1.6 },
-  { id: "vallotton_chale_rouge", x: -0.18, y: 2.3, z: 13.5, rot: VERS_MX, h: 1.45 },
+    // ---- Salle I (ouest, z de 5 à 15) : Paris, capitale des arts
+    { id: "modigliani_hebuterne", x: -13.3, y: 2.3, z: 5.18, rot: VERS_PZ, h: 1.7 },
+    { id: "soutine_groom", x: -12.5, y: 2.3, z: 14.87, rot: VERS_MZ, h: 1.6 },
+    { id: "valadon_chambre_bleue", x: -8.3, y: 2.3, z: 14.87, rot: VERS_MZ, h: 1.45 },
+    { id: "bonnard_petit_poucet", x: -3.9, y: 2.3, z: 14.87, rot: VERS_MZ, h: 1.45 },
+    { id: "gris_arlequin", x: -14.87, y: 2.3, z: 7.9, rot: VERS_PX, h: 1.7 },
+    { id: "delaunay_tour_eiffel", x: -14.87, y: 2.3, z: 12.1, rot: VERS_PX, h: 1.9 },
+    { id: "modigliani_lunia", x: -0.18, y: 2.3, z: 6.5, rot: VERS_MX, h: 1.6 },
+    { id: "vallotton_chale_rouge", x: -0.18, y: 2.3, z: 13.5, rot: VERS_MX, h: 1.45 },
 
-  // ---- Salle II (centrale, z de -5 à 5) : l'abstraction
-  { id: "klee_senecio", x: -13.3, y: 2.3, z: 4.82, rot: VERS_MZ, h: 1.3 },
-  { id: "kandinsky_gelb_rot_blau", x: -6.8, y: 2.3, z: 4.82, rot: VERS_MZ, h: 1.55 },
-  { id: "kandinsky_several_circles", x: -2.8, y: 2.3, z: 4.82, rot: VERS_MZ, h: 1.5 },
-  { id: "mondrian_tableau_i", x: -13.3, y: 2.3, z: -4.82, rot: VERS_PZ, h: 1.3 },
-  { id: "klee_burg_sonne", x: -6.8, y: 2.3, z: -4.82, rot: VERS_PZ, h: 1.6 },
-  { id: "mondrian_composition_ii", x: -2.8, y: 2.3, z: -4.82, rot: VERS_PZ, h: 1.5 },
-  { id: "lissitzky_proun", x: -14.87, y: 2.3, z: -2.3, rot: VERS_PX, h: 1.45 },
-  { id: "malevich_paysan", x: -14.87, y: 2.3, z: 2.3, rot: VERS_PX, h: 1.75 },
-  { id: "doesburg_counter_v", x: -0.18, y: 2.3, z: -3.5, rot: VERS_MX, h: 1.2 },
-  { id: "kandinsky_on_white", x: -0.18, y: 2.3, z: 3.5, rot: VERS_MX, h: 1.25 },
+    // ---- Salle II (centrale, z de -5 à 5) : l'abstraction
+    { id: "klee_senecio", x: -13.3, y: 2.3, z: 4.82, rot: VERS_MZ, h: 1.3 },
+    { id: "kandinsky_gelb_rot_blau", x: -6.8, y: 2.3, z: 4.82, rot: VERS_MZ, h: 1.55 },
+    { id: "kandinsky_several_circles", x: -2.8, y: 2.3, z: 4.82, rot: VERS_MZ, h: 1.5 },
+    { id: "mondrian_tableau_i", x: -13.3, y: 2.3, z: -4.82, rot: VERS_PZ, h: 1.3 },
+    { id: "klee_burg_sonne", x: -6.8, y: 2.3, z: -4.82, rot: VERS_PZ, h: 1.6 },
+    { id: "mondrian_composition_ii", x: -2.8, y: 2.3, z: -4.82, rot: VERS_PZ, h: 1.5 },
+    { id: "lissitzky_proun", x: -14.87, y: 2.3, z: -2.3, rot: VERS_PX, h: 1.45 },
+    { id: "malevich_paysan", x: -14.87, y: 2.3, z: 2.3, rot: VERS_PX, h: 1.75 },
+    { id: "doesburg_counter_v", x: -0.18, y: 2.3, z: -3.5, rot: VERS_MX, h: 1.2 },
+    { id: "kandinsky_on_white", x: -0.18, y: 2.3, z: 3.5, rot: VERS_MX, h: 1.25 },
 
-  // ---- Salle III (est, z de -15 à -5) : l'Amérique du Jazz Age
-  { id: "davis_lucky_strike", x: -13.3, y: 2.3, z: -5.18, rot: VERS_MZ, h: 1.75 },
-  { id: "hopper_automat", x: -6.8, y: 2.3, z: -5.18, rot: VERS_MZ, h: 1.5 },
-  { id: "hopper_railroad", x: -2.8, y: 2.3, z: -5.18, rot: VERS_MZ, h: 1.45 },
-  { id: "wood_american_gothic", x: -12.4, y: 2.3, z: -14.87, rot: VERS_PZ, h: 1.75 },
-  { id: "motley_blues", x: -8.0, y: 2.3, z: -14.87, rot: VERS_PZ, h: 1.5 },
-  { id: "demuth_figure_5", x: -3.6, y: 2.3, z: -14.87, rot: VERS_PZ, h: 1.7 },
-  { id: "okeeffe_black_iris", x: -14.87, y: 2.3, z: -12.1, rot: VERS_PX, h: 1.6 },
-  { id: "jazz_singer_affiche", x: -14.87, y: 2.3, z: -7.9, rot: VERS_PX, h: 1.6 },
-  { id: "louise_brooks", x: -0.18, y: 2.3, z: -6.5, rot: VERS_MX, h: 1.1 },
-  { id: "prohibition", x: -0.18, y: 2.3, z: -13.5, rot: VERS_MX, h: 0.95 },
+    // ---- Salle III (est, z de -15 à -5) : l'Amérique du Jazz Age
+    { id: "davis_lucky_strike", x: -13.3, y: 2.3, z: -5.18, rot: VERS_MZ, h: 1.75 },
+    { id: "hopper_automat", x: -6.8, y: 2.3, z: -5.18, rot: VERS_MZ, h: 1.5 },
+    { id: "hopper_railroad", x: -2.8, y: 2.3, z: -5.18, rot: VERS_MZ, h: 1.45 },
+    { id: "wood_american_gothic", x: -12.4, y: 2.3, z: -14.87, rot: VERS_PZ, h: 1.75 },
+    { id: "motley_blues", x: -8.0, y: 2.3, z: -14.87, rot: VERS_PZ, h: 1.5 },
+    { id: "demuth_figure_5", x: -3.6, y: 2.3, z: -14.87, rot: VERS_PZ, h: 1.7 },
+    { id: "okeeffe_black_iris", x: -14.87, y: 2.3, z: -12.1, rot: VERS_PX, h: 1.6 },
+    { id: "jazz_singer_affiche", x: -14.87, y: 2.3, z: -7.9, rot: VERS_PX, h: 1.6 },
+    { id: "louise_brooks", x: -0.18, y: 2.3, z: -6.5, rot: VERS_MX, h: 1.1 },
+    { id: "prohibition", x: -0.18, y: 2.3, z: -13.5, rot: VERS_MX, h: 0.95 },
 
-  // ---- Mezzanine (plancher à y = 5) : photographies
-  { id: "lindbergh", x: -14.87, y: 7.0, z: -10.5, rot: VERS_PX, h: 1.3 },
-  { id: "expo_1925", x: -14.87, y: 7.0, z: -3.6, rot: VERS_PX, h: 1.35 },
-  { id: "expo_1925_porte", x: -14.87, y: 7.0, z: 3.6, rot: VERS_PX, h: 1.2 },
-  { id: "bauhaus_maitres", x: -14.87, y: 7.0, z: 10.5, rot: VERS_PX, h: 1.75 },
-  { id: "josephine_baker", x: -11, y: 7.0, z: 14.87, rot: VERS_MZ, h: 1.65 },
-  { id: "original_charleston", x: -5, y: 7.0, z: 14.87, rot: VERS_MZ, h: 1.6 },
-  { id: "baker_charleston", x: -11, y: 7.0, z: -14.87, rot: VERS_PZ, h: 1.65 },
-  { id: "lenglen", x: -5, y: 7.0, z: -14.87, rot: VERS_PZ, h: 1.3 },
+    // ---- Mezzanine (plancher à y = 5) : photographies
+    { id: "lindbergh", x: -14.87, y: 7.0, z: -10.5, rot: VERS_PX, h: 1.3 },
+    { id: "expo_1925", x: -14.87, y: 7.0, z: -3.6, rot: VERS_PX, h: 1.35 },
+    { id: "expo_1925_porte", x: -14.87, y: 7.0, z: 3.6, rot: VERS_PX, h: 1.2 },
+    { id: "bauhaus_maitres", x: -14.87, y: 7.0, z: 10.5, rot: VERS_PX, h: 1.75 },
+    { id: "josephine_baker", x: -11, y: 7.0, z: 14.87, rot: VERS_MZ, h: 1.65 },
+    { id: "original_charleston", x: -5, y: 7.0, z: 14.87, rot: VERS_MZ, h: 1.6 },
+    { id: "baker_charleston", x: -11, y: 7.0, z: -14.87, rot: VERS_PZ, h: 1.65 },
+    { id: "lenglen", x: -5, y: 7.0, z: -14.87, rot: VERS_PZ, h: 1.3 },
 
-  // ---- Hall : grands formats
-  { id: "monet_nympheas", x: 7.5, y: 3.0, z: -14.87, rot: VERS_PZ, h: 1.9 },
-  { id: "bellows_dempsey_firpo", x: 13.0, y: 2.9, z: -14.87, rot: VERS_PZ, h: 1.75 },
-  { id: "kandinsky_composition_viii", x: 11.2, y: 3.0, z: 14.87, rot: VERS_MZ, h: 2.1 },
-  { id: "stella_brooklyn_bridge", x: 3.2, y: 6.6, z: 14.87, rot: VERS_MZ, h: 2.3 },
+    // ---- Hall : grands formats
+    { id: "monet_nympheas", x: 7.5, y: 3.0, z: -14.87, rot: VERS_PZ, h: 1.9 },
+    { id: "bellows_dempsey_firpo", x: 13.0, y: 2.9, z: -14.87, rot: VERS_PZ, h: 1.75 },
+    { id: "kandinsky_composition_viii", x: 11.2, y: 3.0, z: 14.87, rot: VERS_MZ, h: 2.1 },
+    { id: "stella_brooklyn_bridge", x: 3.2, y: 6.6, z: 14.87, rot: VERS_MZ, h: 2.3 },
 ];
 
 function texturePlatre(nom, couleur, scene) {
-  const T = 512;
-  const tex = new BABYLON.DynamicTexture(nom, { width: T, height: T }, scene, true);
-  const ctx = tex.getContext();
-  ctx.fillStyle = couleur;
-  ctx.fillRect(0, 0, T, T);
-  for (let i = 0; i < 160; i++) {
-    const x = Math.random() * T, y = Math.random() * T, r = 20 + Math.random() * 80;
-    const c = Math.random() < 0.5 ? "255,255,255" : "110,90,70";
-    for (const dx of [-T, 0, T]) {
-      for (const dy of [-T, 0, T]) {
-        const g = ctx.createRadialGradient(x + dx, y + dy, 0, x + dx, y + dy, r);
-        g.addColorStop(0, `rgba(${c},0.05)`);
-        g.addColorStop(1, `rgba(${c},0)`);
-        ctx.fillStyle = g;
-        ctx.fillRect(x + dx - r, y + dy - r, 2 * r, 2 * r);
-      }
+    const T = 512;
+    const tex = new BABYLON.DynamicTexture(nom, { width: T, height: T }, scene, true);
+    const ctx = tex.getContext();
+    ctx.fillStyle = couleur;
+    ctx.fillRect(0, 0, T, T);
+    for (let i = 0; i < 160; i++) {
+        const x = Math.random() * T, y = Math.random() * T, r = 20 + Math.random() * 80;
+        const c = Math.random() < 0.5 ? "255,255,255" : "110,90,70";
+        for (const dx of [-T, 0, T]) {
+            for (const dy of [-T, 0, T]) {
+                const g = ctx.createRadialGradient(x + dx, y + dy, 0, x + dx, y + dy, r);
+                g.addColorStop(0, `rgba(${c},0.05)`);
+                g.addColorStop(1, `rgba(${c},0)`);
+                ctx.fillStyle = g;
+                ctx.fillRect(x + dx - r, y + dy - r, 2 * r, 2 * r);
+            }
+        }
     }
-  }
-  const img = ctx.getImageData(0, 0, T, T);
-  for (let i = 0; i < img.data.length; i += 4) {
-    const n = (Math.random() - 0.5) * 9;
-    img.data[i] += n;
-    img.data[i + 1] += n;
-    img.data[i + 2] += n;
-  }
-  ctx.putImageData(img, 0, 0);
-  tex.update();
-  tex.wrapU = tex.wrapV = BABYLON.Texture.WRAP_ADDRESSMODE;
-  return tex;
+    const img = ctx.getImageData(0, 0, T, T);
+    for (let i = 0; i < img.data.length; i += 4) {
+        const n = (Math.random() - 0.5) * 9;
+        img.data[i] += n;
+        img.data[i + 1] += n;
+        img.data[i + 2] += n;
+    }
+    ctx.putImageData(img, 0, 0);
+    tex.update();
+    tex.wrapU = tex.wrapV = BABYLON.Texture.WRAP_ADDRESSMODE;
+    return tex;
 }
 
 
@@ -114,10 +114,10 @@ class World extends Simu {
 
 
         const horloge = this.createEntity("horloge", ENTITIES.horloge, {})
-                            .add(COMPS.position, { x: 0.5, y: 0, z: 5 })
-                            .add(COMPS.rotation, { y: -90 })
+            .add(COMPS.position, { x: 0.5, y: 0, z: 5 })
+            .add(COMPS.rotation, { y: -90 })
 
-        this.placerVisiteurs(2);
+        this.placerVisiteurs(10);
 
         this.addBouncingBalls(5);
 
@@ -125,7 +125,6 @@ class World extends Simu {
 
     }
 
-    // Trois téléporteurs : hall -> mezzanine -> Salle III -> Salle I
     placerTeleporteurs() {
         const yMezz = 5.05;
 
@@ -148,7 +147,7 @@ class World extends Simu {
                 titre: "Vers la Salle I", orientation: VERS_PX,
                 destination: { x: -3, y: 0, z: 8 }, regard: { x: -10, z: 10 },
             })
-            .add(COMPS.position, { x: -12, y: 0, z: -12 });
+            .add(COMPS.position, { x: -12, y: 0, z: -12 }); 
     }
 
     addBouncingBalls(n) {
@@ -168,32 +167,53 @@ class World extends Simu {
 
     placerVisiteurs(n) {
         const guide = { x: 11.5, z: -4 };
-        const hall = { xmin: 1, xmax: 14, ymin: 0, ymax: 0, zmin: -14, zmax: 11.5 };
 
-        this.createEntity("guide", ENTITIES.kine, {})
+        const hall = { xmin: 1.5, xmax: 14, zmin: -14, zmax: 11.5 };
+        const obstacles = [
+            { x: 7, z: 0, r: 2.4 },
+            { x: 7.5, z: -10.5, r: 1.5 },
+        ];
+
+        const tour = [
+            { x: 11, z: -1, pause: 6, regard: { x: 7, z: 0 } },              // Moïse
+            { x: 12.5, z: -11.5, pause: 6, regard: { x: 13, z: -15 } },      // Bellows, Dempsey et Firpo
+            { x: 10, z: -12.8, pause: 6, regard: { x: 7.5, z: -15 } },       // Monet, Nymphéas
+            { x: 3.5, z: -6 },
+            { x: 3.5, z: 6 },
+            { x: 11.2, z: 10.5, pause: 6, regard: { x: 11.2, z: 15 } },      // Kandinsky, Composition VIII
+            { x: 12.5, z: 4 },
+        ];
+
+        this.createEntity("guide", ENTITIES.newton, { mass: 1 })
             .add(COMPS.guide, {})
             .add(COMPS.position, { x: guide.x, z: guide.z })
-            .add(COMPS.brownianMotion, { p0: 0.02, vMax: 0.8 })
-            .add(COMPS.rebond, Object.assign({ speed: 0.4 }, hall))
-            .add(COMPS.lookAtForward, {});
+            .add(COMPS.trajectoire, { points: tour, vM: 0.6, fM: 1.5, boucle: true });
+
+        const derriere = 2.5;
 
         for (let i = 0; i < n; i++) {
             const angle = (i + 0.4 * Math.random()) * 2 * Math.PI / n;
             const rayon = 2 + Math.random();
 
-            this.createEntity("visiteur" + i, ENTITIES.kine, {})
+            this.createEntity("visiteur" + i, ENTITIES.newton, { mass: 1 })
                 .add(COMPS.visiteur, {})
                 .add(COMPS.position, { x: guide.x + rayon * Math.cos(angle), z: guide.z + rayon * Math.sin(angle) })
-                .add(COMPS.brownianMotion, { p0: 0.02, vMax: 1.0 })
-                .add(COMPS.rebond, Object.assign({ speed: 0.5 }, hall))
-                .add(COMPS.lookAtForward, { cible: "guide" });
+                .add(COMPS.foule, {
+                    groupe: "visiteurs",
+                    vM: 0.9 + 0.2 * Math.random(),   
+                    fM: 2,
+                    ks: 0.5, kc: 0.2, ka: 0.3,
+                    guide: "guide", derriere,
+                    zone: hall, obstacles,
+                    rCamera: 2,
+                });
         }
     }
 
     createAssets() {
         this.registerAsset("rouge", PRIMS.standardMaterial, { couleur: [0.8, 0.1, 0.1] });
-        this.registerAsset("or",    PRIMS.standardMaterial, { couleur: [0.8, 0.58, 0.24] });
-        this.registerAsset("bleu",  PRIMS.standardMaterial, { couleur: [0.2, 0.4, 0.9] });
+        this.registerAsset("or", PRIMS.standardMaterial, { couleur: [0.8, 0.58, 0.24] });
+        this.registerAsset("bleu", PRIMS.standardMaterial, { couleur: [0.2, 0.4, 0.9] });
 
         this.registerAsset("envReflet", (nom, data, scene) => {
             const envReflet = BABYLON.CubeTexture.CreateFromPrefilteredData(

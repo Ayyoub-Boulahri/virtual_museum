@@ -32,6 +32,8 @@ import {Guide}          from  './guide.js' ;
 import {Visiteur}       from  './visiteur.js' ; 
 import {Vitrine}        from  './vitrine.js' ; 
 import {Teleporteur}    from  './teleporteur.js' ; 
+import {Trajectoire}    from  './trajectoire.js' ; 
+import {Foule}          from  './foule.js' ; 
 
 
 
@@ -60,6 +62,8 @@ const COMPS = {
     visiteur       : Visiteur,
     vitrine        : Vitrine,
     teleporteur    : Teleporteur,
+    trajectoire    : Trajectoire,
+    foule          : Foule,
 
     lookAtForward  : LookAtForward,
 
