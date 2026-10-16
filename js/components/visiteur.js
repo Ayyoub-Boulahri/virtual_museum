@@ -1,5 +1,5 @@
 import {Component} from './component.js';
-import {creerPersonnage, materiau} from './personnage.js';
+import {PRIMS} from '../prims.js';
 
 const alea  = (min, max) => min + Math.random() * (max - min);
 const choix = (liste) => liste[Math.floor(Math.random() * liste.length)];
@@ -16,7 +16,7 @@ class Visiteur extends Component {
         const scn = entity.sim.scene;
 
         const hauteur = data.hauteur ?? alea(1.55, 1.9);
-        const p = creerPersonnage(entity.name, {
+        const p = PRIMS.person(entity.name, {
             hauteur,
             largeur:   data.largeur   ?? alea(0.42, 0.56),
             epaisseur: data.epaisseur ?? alea(0.24, 0.32),
@@ -32,7 +32,7 @@ class Visiteur extends Component {
             const cylindre = (partie, diametre, hauteurC, yC, couleur) => {
                 const c = BABYLON.MeshBuilder.CreateCylinder(entity.name + "-" + partie,
                     { diameter: diametre, height: hauteurC, tessellation: 24 }, scn);
-                c.material = materiau(couleur, scn);
+                c.material = PRIMS.personMaterial(couleur, scn);
                 c.parent = p.groupe;
                 c.position.y = yC;
             };

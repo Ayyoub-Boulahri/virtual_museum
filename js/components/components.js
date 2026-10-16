@@ -30,6 +30,7 @@ import {Lumiere}        from  './lumiere.js' ;
 
 import {Guide}          from  './guide.js' ; 
 import {Visiteur}       from  './visiteur.js' ; 
+import {Vitrine}        from  './vitrine.js' ; 
 
 
 
@@ -56,6 +57,7 @@ const COMPS = {
     lumiere        : Lumiere,
     guide          : Guide,
     visiteur       : Visiteur,
+    vitrine        : Vitrine,
 
     lookAtForward  : LookAtForward,
 

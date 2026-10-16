@@ -166,13 +166,7 @@ class Pendule extends Entity {
 }
 
 
-// Black and gold column clock, in the museum's colours: a slim lacquered
-// column with a round black dial on top and a gilded pendulum in front.
-// Virtual time (seconds since midnight) advances by dt, i.e. at the same
-// speed as physical time. Starts at data.heure/minute/seconde if given,
-// otherwise at the current real time.
-// Local frame: origin on the floor, dial facing -Z, back of the column at z = 0.4
-// (put that side against a wall).
+
 class Horloge extends Entity {
     constructor(name, data, sim){
         super(name, data, sim);
@@ -190,7 +184,6 @@ class Horloge extends Entity {
         const groupe = new BABYLON.TransformNode("horloge-" + name, scn);
         if (data.parent !== undefined) groupe.parent = data.parent;
         groupe.position.copyFrom(this.position);
-        if (data.rotY !== undefined) groupe.rotation.y = data.rotY;
         this.object3d = groupe;
 
         // Same black and gold as the statue's plinth
@@ -273,7 +266,7 @@ class Horloge extends Entity {
             materiauTige: matOr,
             materiauMasse: matOr
         }, sim);
-        
+
         // in phase with the time: the bob passes the middle when the seconds hand ticks
         this.pendule.t = this.temps % this.pendule.T;
 

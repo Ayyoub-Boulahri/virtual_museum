@@ -555,6 +555,60 @@ function creerPanneau(nom, opts, scn) {
 }
 
 // Banc de musée : assise en bois sur piètement noir
+// Glass display case: black plinth, glass cube with gold edges.
+// Options : cote (side of the cube), socle (height of the plinth).
+// Local frame: origin on the floor at the centre of the plinth.
+function creerVitrine(nom, opts, scn) {
+  const options = opts || {};
+  const cote = options.cote || 1.6;
+  const hSocle = options.socle ?? 0.8;
+
+  const groupe = new BABYLON.TransformNode("vitrine-" + nom, scn);
+
+  const matVitre = new BABYLON.StandardMaterial("mat-vitre-" + nom, scn);
+  matVitre.diffuseColor = new BABYLON.Color3(0.75, 0.9, 0.9);
+  matVitre.specularColor = new BABYLON.Color3(0.8, 0.8, 0.8);
+  matVitre.alpha = 0.18;
+  matVitre.backFaceCulling = false;
+
+  const matSocle = new BABYLON.StandardMaterial("mat-socle-" + nom, scn);
+  matSocle.diffuseColor = new BABYLON.Color3(0.05, 0.045, 0.04);
+
+  const matArete = new BABYLON.StandardMaterial("mat-arete-" + nom, scn);
+  matArete.diffuseColor = new BABYLON.Color3(0.8, 0.58, 0.24);
+  matArete.specularColor = new BABYLON.Color3(0.6, 0.5, 0.3);
+
+  [matVitre, matSocle, matArete].forEach((m) => { m.maxSimultaneousLights = 10; });
+
+  const boite = (partie, w, h, d, x, y, z, mat) => {
+    const b = BABYLON.MeshBuilder.CreateBox(nom + "-" + partie, { width: w, height: h, depth: d }, scn);
+    b.material = mat;
+    b.parent = groupe;
+    b.position.set(x, y, z);
+    return b;
+  };
+
+  if (hSocle > 0) {
+    boite("socle", cote + 0.2, hSocle, cote + 0.2, 0, hSocle / 2, 0, matSocle).checkCollisions = true;
+  }
+
+  const vitre = boite("vitre", cote, cote, cote, 0, hSocle + cote / 2, 0, matVitre);
+  vitre.checkCollisions = true;
+  vitre.isPickable = false;
+
+  // gold edges: 4 vertical, 4 at the top
+  const h = cote / 2, e = 0.03;
+  [-1, 1].forEach((sx) => [-1, 1].forEach((sz) => {
+    boite("montant" + sx + sz, e, cote, e, sx * h, hSocle + h, sz * h, matArete);
+  }));
+  [-1, 1].forEach((s) => {
+    boite("haut-x" + s, cote, e, e, 0, hSocle + cote, s * h, matArete);
+    boite("haut-z" + s, e, e, cote, s * h, hSocle + cote, 0, matArete);
+  });
+
+  return groupe;
+}
+
 function creerBanc(nom, opts, scn) {
   const options = opts || {};
   const longueur = options.longueur || 2.2;
@@ -689,82 +743,82 @@ function creuser(mesh0, mesh1) {
   return csgMesh;
 }
 
+// Blocky character (used by the Guide and Visiteur components).
+// Every size is a parameter; the figure stands on y = 0 and looks towards +Z.
+// Options : hauteur, largeur, epaisseur, tete (head side), yeux (eye diameter),
+//           couleurs { peau, haut, bas, cheveux } as "#rrggbb"
+// Returns { groupe, boite, dimensions... } so a component can add accessories.
+const materiauxPersonne = new Map();
+function materiauPersonne(couleur, scn) {
+  if (!materiauxPersonne.has(couleur)) {
+    const m = new BABYLON.StandardMaterial("mat-perso-" + couleur, scn);
+    m.diffuseColor = BABYLON.Color3.FromHexString(couleur);
+    m.specularColor = new BABYLON.Color3(0.05, 0.05, 0.05);
+    m.maxSimultaneousLights = 10;
+    materiauxPersonne.set(couleur, m);
+  }
+  return materiauxPersonne.get(couleur);
+}
+
 function creerPersonne(nom, opts, scn) {
-  let options = opts || {};
-  let hauteur = options.hauteur || 0.5;
-  let largeur = options.largeur || 0.5;
-  let epaisseur = options.epaisseur || 0.5;
-  let diametre = options.diametre || 0.1;
+  const H = opts.hauteur   ?? 1.75;
+  const L = opts.largeur   ?? 0.5;
+  const E = opts.epaisseur ?? 0.28;
+  const T = opts.tete      ?? 0.26;
+  const D = opts.yeux      ?? 0.06;
+  const c = Object.assign(
+    { peau: "#e8b896", haut: "#555555", bas: "#2b2b2b", cheveux: "#3b2416" },
+    opts.couleurs);
 
-  let materiau =
-    options.materiau || new BABYLON.StandardMaterial("materiau-pos" + nom, scn);
-  let eye_material =
-    options.eye_material ||
-    new BABYLON.StandardMaterial("materiau-pos" + nom, scn);
-  let body_material =
-    options.body_material ||
-    new BABYLON.StandardMaterial("materiau-pos" + nom, scn);
-  let hair_material = options.hair_material;
+  const groupe = new BABYLON.TransformNode("personnage-" + nom, scn);
 
-  if (!hair_material) {
-    hair_material = new BABYLON.StandardMaterial("materiau-pos" + nom, scn);
-    hair_material.diffuseColor = new BABYLON.Color3(0, 0, 0);
-  } //noir
+  const boite = (partie, w, h, d, x, y, z, couleur) => {
+    const b = BABYLON.MeshBuilder.CreateBox(nom + "-" + partie,
+      { width: w, height: h, depth: d }, scn);
+    b.material = materiauPersonne(couleur, scn);
+    b.parent = groupe;
+    b.position.set(x, y, z);
+    return b;
+  };
+  const sphere = (partie, diametre, x, y, z, couleur) => {
+    const s = BABYLON.MeshBuilder.CreateSphere(nom + "-" + partie,
+      { diameter: diametre, segments: 8 }, scn);
+    s.material = materiauPersonne(couleur, scn);
+    s.parent = groupe;
+    s.position.set(x, y, z);
+    return s;
+  };
 
-  let groupe = new BABYLON.TransformNode("groupe-" + nom);
+  // Below the head: legs, then the torso with an arm on each side
+  const hCorps  = H - T;
+  const hJambes = 0.48 * hCorps;
+  const hTronc  = hCorps - hJambes;
+  const lJambe  = 0.42 * L;
+  const hBras   = 0.9 * hTronc;
+  [-1, 1].forEach((s) => {
+    boite("jambe" + s, lJambe, hJambes, 0.8 * E, s * (L - lJambe) / 2, hJambes / 2, 0, c.bas);
+    boite("bras" + s, 0.2 * L, hBras, 0.7 * E, s * 0.6 * L, hCorps - hBras / 2, 0, c.haut);
+    boite("main" + s, 0.16 * L, 0.3 * T, 0.5 * E, s * 0.6 * L, hCorps - hBras - 0.15 * T, 0, c.peau);
+  });
+  const tronc = boite("tronc", L, hTronc, E, 0, hJambes + hTronc / 2, 0, c.haut);
 
-  let body = BABYLON.MeshBuilder.CreateBox(
-    nom,
-    { width: largeur * 2, height: hauteur * 4, depth: epaisseur * 2 },
-    scn,
-  );
-  body.material = body_material;
-  body.parent = groupe;
-  body.position.y = hauteur * 2;
+  // Head with hair on the top and the back
+  const tete = boite("tete", T, T, 0.9 * T, 0, hCorps + T / 2, 0, c.peau);
+  boite("cheveux",     1.04 * T, 0.22 * T, 0.94 * T, 0, hCorps + 0.93 * T, 0,          c.cheveux);
+  boite("cheveux-dos", 1.04 * T, 0.6 * T,  0.1 * T,  0, hCorps + 0.7 * T, -0.47 * T, c.cheveux);
 
-  let head = BABYLON.MeshBuilder.CreateBox(
-    nom,
-    { width: largeur, height: hauteur * 0.8, depth: epaisseur },
-    scn,
-  );
-  head.material = materiau;
-  head.parent = groupe;
-  head.position.y = hauteur * 4 + (hauteur * 0.8) / 2.0;
+  // Face, on the +Z side of the head
+  const zFace = 0.45 * T;
+  [-1, 1].forEach((s) => {
+    sphere("oeil" + s,   D,       s * 0.22 * T, hCorps + 0.58 * T, zFace,            "#f4f4f0");
+    sphere("pupille" + s, 0.5 * D, s * 0.22 * T, hCorps + 0.58 * T, zFace + 0.35 * D, "#111111");
+  });
+  boite("bouche", 0.3 * T, 0.04 * T, 0.02, 0, hCorps + 0.25 * T, zFace, "#8a3b30");
 
-  let hair = BABYLON.MeshBuilder.CreateBox(
-    nom,
-    { width: largeur, height: hauteur * 0.2, depth: epaisseur },
-    scn,
-  );
-  hair.material = hair_material;
-  hair.parent = groupe;
-  hair.position.y = hauteur * 4 + hauteur * 0.8 + 0.1 * hauteur;
+  tronc.checkCollisions = true;
+  tete.checkCollisions = true;
 
-  let eye_L = BABYLON.MeshBuilder.CreateSphere(
-    nom,
-    { diameter: diametre },
-    scn,
-  );
-  eye_L.material = eye_material;
-  eye_L.parent = groupe;
-  eye_L.position.x = largeur / 5;
-  eye_L.position.y = hauteur * 4 + hauteur / 2.0;
-  eye_L.position.z = largeur / 2;
-  eye_L.rotation.y = (2 * Math.PI) / 4;
-
-  let eye_R = BABYLON.MeshBuilder.CreateSphere(
-    nom,
-    { diameter: diametre },
-    scn,
-  );
-  eye_R.material = eye_material;
-  eye_R.parent = groupe;
-  eye_R.position.x = -largeur / 5;
-  eye_R.position.y = hauteur * 4 + hauteur / 2.0;
-  eye_R.position.z = largeur / 2;
-  eye_R.rotation.y = (2 * Math.PI) / 4;
-
-  return groupe;
+  return { groupe, boite, H, L, E, T, hCorps, hJambes, hTronc, couleurs: c };
 }
 
 function wallWithHole(nom, opts, scn) {
@@ -1163,6 +1217,7 @@ const PRIMS = {
   sky: creerCiel,
   creuser: creuser,
   person: creerPersonne,
+  personMaterial: materiauPersonne,
   wallHole: wallWithHole, //creerCloisonAvecTrous,//creerCloisonEtTrou
   door: creerPorte,
   model: creerModel3D,
@@ -1171,6 +1226,7 @@ const PRIMS = {
   stairs: creerEscalier,
   sign: creerPanneau,
   bench: creerBanc,
+  glassCase: creerVitrine,
   pendant: creerSuspension,
   ceilingLight: creerPlafonnier,
   registerArtwork: enregistrerOeuvre,

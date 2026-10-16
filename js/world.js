@@ -112,93 +112,151 @@ class World extends Simu {
         this.createAssets();
         this.createDecor();
 
-        
-        // const ciel = this.createEntity("ciel", ENTITIES.entity, {})
-        //     .add(COMPS.sky, {})
-        //     ;
-        
-        // const sol = this.createEntity("sol", ENTITIES.entity, {})
-        //     .add(COMPS.ground, { material: "marbre_blanc" })
-        //     ;
-        
-        // const dali = this.createEntity("dali", ENTITIES.kine, {})
-        //     .add(COMPS.model, {
-        //         file: "./assets1/glb_load/dali.glb",
-        //         scale: 0.005,
-        //         color: [0.72, 0.62, 0.25]
-        //     })
-        //     .add(COMPS.position, { x: 5, y: 2.8, z: 0.14 })
-        //     .add(COMPS.lookAtForward, {})
-        //     .add(COMPS.brownianMotion, {})
-        //     ;
-            
 
-        const horloge = this.createEntity("horloge", ENTITIES.horloge, { x: 0.5, y: 0, z: 5, rotY: -Math.PI / 2 });
+        const horloge = this.createEntity("horloge", ENTITIES.horloge, {})
+                            .add(COMPS.position, { x: 0.5, y: 0, z: 5 })
+                            .add(COMPS.rotation, { y: -90 })
 
-        this.placerVisiteurs(6);
+        this.placerVisiteurs(2);
 
-        // =========================
-        // 4) Objets procéduraux conservés depuis ton world.js
-        // =========================
-        // const offsetY = 5.1;
+        this.addBouncingBalls(5);
 
-        // const sphere = PRIMS.sphere("sph1", {}, scene);
-        // const sph = PRIMS.sphere("sph2", {}, scene);
-        // sph.position.y = 0.5;
-        // PRIMS.creuser(sphere, sph);
+    }
 
-        // const sphere_b = PRIMS.sphere("sph1_b", {}, scene);
-        // sphere_b.position.y = offsetY;
+    addBouncingBalls(n) {
+        this.createEntity("vitrine", ENTITIES.entity, {})
+            .add(COMPS.vitrine, { cote: 1.6, socle: 0.8 })
+            .add(COMPS.position, { x: -7.5, y: 5.05, z: 2.5 });
 
-        // const sph_b = PRIMS.sphere("sph2_b", {}, scene);
-        // sph_b.position.y = 0.5 + offsetY;
-        // PRIMS.creuser(sphere_b, sph_b);
+        const couleurs = ["rouge", "or", "bleu"];
 
+        for (let i = 0; i < n; i++) {
+            this.createEntity("boule" + i, ENTITIES.kine, {})
+                .add(COMPS.sphere, { name: "boule" + i, diameter: 0.25, material: couleurs[i % couleurs.length] })
+                .add(COMPS.position, { x: -7.5, y: 6.65, z: 2.5 })
+                .add(COMPS.rebond, { dans: "vitrine", rayon: 0.125, speed: 1.5 });
+        }
     }
 
     placerVisiteurs(n) {
-        const guide = { x: 9.8, z: -2.0 };
-        const libre = (x, z) =>
-            !(Math.abs(x - 7) < 2.3 && Math.abs(z) < 2.3) &&           // statue
-            !(x < 8.0 && z > 11.5) &&                                  // stairs
-            !(x < 2.0 && Math.abs(z - 5) < 1.2) &&                     // clock
-            !(Math.abs(x - 7.5) < 1.9 && Math.abs(z + 10.5) < 1.0) &&  // bench
-            Math.hypot(x - 10, z - 5) > 1.5;                           // camera start
+        const guide = { x: 11.5, z: -4 };
+        const hall = { xmin: 1, xmax: 14, ymin: 0, ymax: 0, zmin: -14, zmax: 11.5 };
 
-        const places = [guide];
-        for (let essai = 0; places.length < n + 1 && essai < 1000; essai++) {
-            const x = 1.5 + Math.random() * 12.5;
-            const z = -14 + Math.random() * 28;
-            if (libre(x, z) && places.every((p) => Math.hypot(x - p.x, z - p.z) > 1.2)) {
-                places.push({ x, z });
-            }
-        }
-
-        // rotation.y (in degrees) that makes +Z look from p towards cible
-        const vers = (p, cible) => Math.atan2(cible.x - p.x, cible.z - p.z) * 180 / Math.PI;
-
-        const visiteurs = places.slice(1);
-        const centre = {
-            x: visiteurs.reduce((s, p) => s + p.x, 0) / visiteurs.length,
-            z: visiteurs.reduce((s, p) => s + p.z, 0) / visiteurs.length,
-        };
-
-        this.createEntity("guide", ENTITIES.entity, {})
+        this.createEntity("guide", ENTITIES.kine, {})
             .add(COMPS.guide, {})
             .add(COMPS.position, { x: guide.x, z: guide.z })
-            .add(COMPS.rotation, { y: vers(guide, centre) });
+            .add(COMPS.brownianMotion, { p0: 0.02, vMax: 0.8 })
+            .add(COMPS.rebond, Object.assign({ speed: 0.4 }, hall))
+            .add(COMPS.lookAtForward, {});
 
-        visiteurs.forEach((p, i) => {
-            this.createEntity("visiteur" + i, ENTITIES.entity, {})
+        for (let i = 0; i < n; i++) {
+            const angle = (i + 0.4 * Math.random()) * 2 * Math.PI / n;
+            const rayon = 2 + Math.random();
+
+            this.createEntity("visiteur" + i, ENTITIES.kine, {})
                 .add(COMPS.visiteur, {})
-                .add(COMPS.position, { x: p.x, z: p.z })
-                .add(COMPS.rotation, { y: vers(p, guide) });
-        });
+                .add(COMPS.position, { x: guide.x + rayon * Math.cos(angle), z: guide.z + rayon * Math.sin(angle) })
+                .add(COMPS.brownianMotion, { p0: 0.02, vMax: 1.0 })
+                .add(COMPS.rebond, Object.assign({ speed: 0.5 }, hall))
+                .add(COMPS.lookAtForward, { cible: "guide" });
+        }
     }
 
     createAssets() {
+        this.registerAsset("rouge", PRIMS.standardMaterial, { couleur: [0.8, 0.1, 0.1] });
+        this.registerAsset("or",    PRIMS.standardMaterial, { couleur: [0.8, 0.58, 0.24] });
+        this.registerAsset("bleu",  PRIMS.standardMaterial, { couleur: [0.2, 0.4, 0.9] });
 
+        this.registerAsset("envReflet", (nom, data, scene) => {
+            const envReflet = BABYLON.CubeTexture.CreateFromPrefilteredData(
+                "https://assets.babylonjs.com/environments/environmentSpecular.env",
+                scene,
+            );
+            envReflet.level = 0.15;
+            return envReflet;
+        });
+        const envReflet = this.findAsset("envReflet");
 
+        this.registerAsset("platreMur", (nom, data, scene) => {
+            const m = new BABYLON.StandardMaterial("mat_wall", scene);
+            m.diffuseTexture = texturePlatre("tex_platre_mur", "#e6dccb", scene);
+            m.diffuseTexture.uScale = 3;
+            m.diffuseTexture.vScale = 2;
+            m.specularColor = new BABYLON.Color3(0.04, 0.04, 0.04);
+            return m;
+        });
+
+        this.registerAsset("platrePlafond", (nom, data, scene) => {
+            const m = new BABYLON.StandardMaterial("mat_plafond", scene);
+            m.diffuseTexture = texturePlatre("tex_platre_plafond", "#f1ebe0", scene);
+            m.diffuseTexture.uScale = 4;
+            m.diffuseTexture.vScale = 4;
+            m.specularColor = BABYLON.Color3.Black();
+            m.emissiveColor = new BABYLON.Color3(0.17, 0.155, 0.135);
+            return m;
+        });
+
+        this.registerAsset("marbre", (nom, data, scene) => {
+            const m = PRIMS.standardMaterial("mat_sol", { texture: "./assets/marble.jpg", uScale: 12, vScale: 12 }, scene);
+            m.specularColor = new BABYLON.Color3(0.35, 0.35, 0.35);
+            m.specularPower = 96;
+            m.reflectionTexture = envReflet;
+            return m;
+        });
+
+        this.registerAsset("parquet", (nom, data, scene) => {
+            const m = PRIMS.standardMaterial("mat_parquet", { texture: "./assets/240.jpg", uScale: 4, vScale: 8 }, scene);
+            m.diffuseColor = new BABYLON.Color3(0.85, 0.72, 0.58);
+            m.specularColor = new BABYLON.Color3(0.12, 0.1, 0.08);
+            return m;
+        });
+
+        this.registerAsset("bois", (nom, data, scene) => {
+            const m = PRIMS.standardMaterial("mat_bois", { texture: "./assets/wood.jpg", uScale: 3, vScale: 3 }, scene);
+            m.specularColor = new BABYLON.Color3(0.15, 0.12, 0.1);
+            m.specularPower = 48;
+            return m;
+        });
+
+        this.registerAsset("verreNoir", (nom, data, scene) => {
+            const m = new BABYLON.StandardMaterial("mat_verre_noir", scene);
+            m.diffuseColor = new BABYLON.Color3(0, 0, 0);
+            m.specularColor = new BABYLON.Color3(0.6, 0.6, 0.6);
+            m.specularPower = 128;
+            m.reflectionTexture = envReflet;
+            m.alpha = 0.5;
+            m.backFaceCulling = false;
+            return m;
+        });
+
+        this.registerAsset("verre", (nom, data, scene) => {
+            const m = new BABYLON.PBRMaterial("mat_verre", scene);
+            m.albedoColor = new BABYLON.Color3(0.75, 0.9, 0.9);
+            m.alpha = 0.16;
+            m.metallic = 0;
+            m.roughness = 0.05;
+            m.backFaceCulling = false;
+            m.usePhysicalLightFalloff = false;
+            return m;
+        });
+
+        this.registerAsset("orMetal", (nom, data, scene) => {
+            const m = new BABYLON.PBRMaterial("mat_or", scene);
+            m.albedoColor = new BABYLON.Color3(0.8, 0.58, 0.24);
+            m.metallic = 0.95;
+            m.roughness = 0.3;
+            m.usePhysicalLightFalloff = false;
+            return m;
+        });
+
+        this.registerAsset("noirLaque", (nom, data, scene) => {
+            const m = new BABYLON.PBRMaterial("mat_noir", scene);
+            m.albedoColor = new BABYLON.Color3(0.045, 0.04, 0.035);
+            m.metallic = 0.35;
+            m.roughness = 0.25;
+            m.usePhysicalLightFalloff = false;
+            return m;
+        });
     }
 
     createDecor() {
@@ -224,12 +282,6 @@ class World extends Simu {
             scene,
         );
         scene.environmentIntensity = 0.6;
-
-        const envReflet = BABYLON.CubeTexture.CreateFromPrefilteredData(
-            "https://assets.babylonjs.com/environments/environmentSpecular.env",
-            scene,
-        );
-        envReflet.level = 0.15;
 
         const ambientLight = new BABYLON.HemisphericLight(
             "ambientLight",
@@ -295,85 +347,15 @@ class World extends Simu {
             l.specular = BABYLON.Color3.Black();
         });
 
-        const materiau1 = new BABYLON.StandardMaterial("mat_wall", scene);
-        materiau1.diffuseTexture = texturePlatre("tex_platre_mur", "#e6dccb", scene);
-        materiau1.diffuseTexture.uScale = 3;
-        materiau1.diffuseTexture.vScale = 2;
-        materiau1.specularColor = new BABYLON.Color3(0.04, 0.04, 0.04);
-
-        const matPlafond = new BABYLON.StandardMaterial("mat_plafond", scene);
-        matPlafond.diffuseTexture = texturePlatre("tex_platre_plafond", "#f1ebe0", scene);
-        matPlafond.diffuseTexture.uScale = 4;
-        matPlafond.diffuseTexture.vScale = 4;
-        matPlafond.specularColor = BABYLON.Color3.Black();
-        // éclairage indirect du plafond (les lampes l'atteignent en lumière rasante)
-        matPlafond.emissiveColor = new BABYLON.Color3(0.17, 0.155, 0.135);
-
-        const materiau2 = PRIMS.standardMaterial(
-            "mat_sol",
-            {
-                texture: "./assets/marble.jpg",
-                uScale: 12,
-                vScale: 12,
-            },
-            scene,
-        );
-        materiau2.specularColor = new BABYLON.Color3(0.35, 0.35, 0.35);
-        materiau2.specularPower = 96;
-
-        materiau2.reflectionTexture = envReflet;
-
-        const matParquet = PRIMS.standardMaterial(
-            "mat_parquet",
-            {
-                texture: "./assets/240.jpg",
-                uScale: 4,
-                vScale: 8,
-            },
-            scene,
-        );
-        matParquet.diffuseColor = new BABYLON.Color3(0.85, 0.72, 0.58);
-        matParquet.specularColor = new BABYLON.Color3(0.12, 0.1, 0.08);
-
-        const matBois = PRIMS.standardMaterial(
-            "mat_bois",
-            {
-                texture: "./assets/wood.jpg",
-                uScale: 3,
-                vScale: 3,
-            },
-            scene,
-        );
-        matBois.specularColor = new BABYLON.Color3(0.15, 0.12, 0.1);
-        matBois.specularPower = 48;
-
-        const matVerreNoir = new BABYLON.StandardMaterial("mat_verre_noir", scene);
-        matVerreNoir.diffuseColor = new BABYLON.Color3(0, 0, 0);
-        matVerreNoir.specularColor = new BABYLON.Color3(0.6, 0.6, 0.6);
-        matVerreNoir.specularPower = 128;
-        matVerreNoir.reflectionTexture = envReflet;
-        matVerreNoir.alpha = 0.5;
-        matVerreNoir.backFaceCulling = false;
-
-        const matVerre = new BABYLON.PBRMaterial("mat_verre", scene);
-        matVerre.albedoColor = new BABYLON.Color3(0.75, 0.9, 0.9);
-        matVerre.alpha = 0.16;
-        matVerre.metallic = 0;
-        matVerre.roughness = 0.05;
-        matVerre.backFaceCulling = false;
-        matVerre.usePhysicalLightFalloff = false;
-
-        const matOr = new BABYLON.PBRMaterial("mat_or", scene);
-        matOr.albedoColor = new BABYLON.Color3(0.8, 0.58, 0.24);
-        matOr.metallic = 0.95;
-        matOr.roughness = 0.3;
-        matOr.usePhysicalLightFalloff = false;
-
-        const matNoir = new BABYLON.PBRMaterial("mat_noir", scene);
-        matNoir.albedoColor = new BABYLON.Color3(0.045, 0.04, 0.035);
-        matNoir.metallic = 0.35;
-        matNoir.roughness = 0.25;
-        matNoir.usePhysicalLightFalloff = false;
+        const materiau1 = this.findAsset("platreMur");
+        const matPlafond = this.findAsset("platrePlafond");
+        const materiau2 = this.findAsset("marbre");
+        const matParquet = this.findAsset("parquet");
+        const matBois = this.findAsset("bois");
+        const matVerreNoir = this.findAsset("verreNoir");
+        const matVerre = this.findAsset("verre");
+        const matOr = this.findAsset("orMetal");
+        const matNoir = this.findAsset("noirLaque");
 
         const ciel = PRIMS.sky("ciel", {}, scene);
 
