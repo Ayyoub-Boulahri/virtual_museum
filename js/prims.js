@@ -155,7 +155,7 @@ function creerSphere(nom, opts, scn) {
     materiau.diffuseColor = new BABYLON.Color3(1.0, 1.0, 1.0);
   }
 
-  let sph = BABYLON.Mesh.CreateSphere(nom, 16, diametre, scn);
+  let sph = BABYLON.MeshBuilder.CreateSphere(nom, { segments: 16, diameter: diametre }, scn);
   sph.material = materiau;
 
   return sph;

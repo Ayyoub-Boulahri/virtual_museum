@@ -32,7 +32,8 @@ class Visu {
 	go(){
     		const that = this ; 
     		this.engine.runRenderLoop(function(){
-        		const dt = that.engine.getDeltaTime()/1000.0 ; 
+        		// pas de temps borné : une longue image (chargement) ferait sortir les boules de la vitrine
+        		const dt = Math.min(that.engine.getDeltaTime()/1000.0, 0.05) || 0 ;
         		that.clock += dt ; 
         		that.update(dt) ; 
 				// teleport() disabled: its zone was the doorway of Salle II, and the stairs now reach the mezzanine
