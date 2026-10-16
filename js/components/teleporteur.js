@@ -1,10 +1,6 @@
 import {PRIMS} from '../prims.js';
 import {Component} from './component.js';
 
-// Plateforme de téléportation (voir PRIMS.teleportPad).
-// Quand la caméra entre dans le disque, elle est déplacée vers la destination.
-// data: destination {x, y, z} (y = niveau du sol d'arrivée), regard {x, z} (point visé à l'arrivée),
-//       rayon, titre (texte du panneau), orientation (rotation du panneau)
 class Teleporteur extends Component {
 
     constructor(data, entity){
