@@ -655,6 +655,50 @@ function creerSuspension(nom, opts, scn) {
 }
 
 // Plafonnier encastré (disque lumineux cerclé de laiton), à poser sous un plafond
+// Plateforme de téléportation : anneau doré au sol, disque lumineux et colonne de lumière
+function creerTeleporteur(nom, opts, scn) {
+  const options = opts || {};
+  const rayon = options.rayon || 0.6;
+  const groupe = new BABYLON.TransformNode("teleporteur-" + nom, scn);
+
+  const anneau = BABYLON.MeshBuilder.CreateTorus("anneau-tp-" + nom, { diameter: 2 * rayon, thickness: 0.06, tessellation: 48 }, scn);
+  anneau.material = materiauCadre("dore", scn);
+  anneau.position.y = 0.03;
+  anneau.isPickable = false;
+  anneau.parent = groupe;
+
+  const disque = BABYLON.MeshBuilder.CreateCylinder("disque-tp-" + nom, { height: 0.02, diameter: 2 * rayon - 0.08, tessellation: 48 }, scn);
+  disque.material = materiauUni("mat-teleporteur", new BABYLON.Color3(1.0, 0.8, 0.45), scn, true);
+  disque.metadata = { glow: true };
+  disque.position.y = 0.015;
+  disque.isPickable = false;
+  disque.parent = groupe;
+
+  const colonne = BABYLON.MeshBuilder.CreateCylinder("colonne-tp-" + nom, { height: 2.2, diameterTop: 2 * rayon - 0.2, diameterBottom: 2 * rayon - 0.08, tessellation: 32, cap: BABYLON.Mesh.NO_CAP, sideOrientation: BABYLON.Mesh.DOUBLESIDE }, scn);
+  colonne.material = partage(scn, "mat-colonne-tp", () => {
+    const m = new BABYLON.StandardMaterial("mat-colonne-tp", scn);
+    m.diffuseColor = BABYLON.Color3.Black();
+    m.specularColor = BABYLON.Color3.Black();
+    m.emissiveColor = new BABYLON.Color3(1.0, 0.82, 0.5);
+    m.disableLighting = true;
+    m.alpha = 0.12;
+    m.backFaceCulling = false;
+    return m;
+  });
+  colonne.position.y = 1.1;
+  colonne.isPickable = false;
+  colonne.parent = groupe;
+
+  if (options.titre) {
+    const panneau = creerPanneau("tp-" + nom, { largeur: 1.6, hauteur: 0.4, surtitre: "Téléportation", titre: options.titre }, scn);
+    panneau.parent = groupe;
+    panneau.position.y = 2.5;
+    panneau.rotation.y = options.orientation || 0;
+  }
+
+  return groupe;
+}
+
 function creerPlafonnier(nom, opts, scn) {
   const options = opts || {};
   const diametre = options.diametre || 0.9;
@@ -1229,6 +1273,7 @@ const PRIMS = {
   glassCase: creerVitrine,
   pendant: creerSuspension,
   ceilingLight: creerPlafonnier,
+  teleportPad: creerTeleporteur,
   registerArtwork: enregistrerOeuvre,
 };
 

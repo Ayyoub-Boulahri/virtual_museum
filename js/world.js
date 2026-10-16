@@ -121,6 +121,34 @@ class World extends Simu {
 
         this.addBouncingBalls(5);
 
+        this.placerTeleporteurs();
+
+    }
+
+    // Trois téléporteurs : hall -> mezzanine -> Salle III -> Salle I
+    placerTeleporteurs() {
+        const yMezz = 5.05;
+
+        this.createEntity("tpHall", ENTITIES.entity, {})
+            .add(COMPS.teleporteur, {
+                titre: "Vers la mezzanine", orientation: VERS_MZ,
+                destination: { x: -3, y: yMezz, z: -2 }, regard: { x: -10, z: -2 },
+            })
+            .add(COMPS.position, { x: 11, y: 0, z: 9 });
+
+        this.createEntity("tpMezzanine", ENTITIES.entity, {})
+            .add(COMPS.teleporteur, {
+                titre: "Vers la Salle III", orientation: VERS_PX,
+                destination: { x: -3, y: 0, z: -8 }, regard: { x: -10, z: -10 },
+            })
+            .add(COMPS.position, { x: -11, y: yMezz, z: -11 });
+
+        this.createEntity("tpSalle3", ENTITIES.entity, {})
+            .add(COMPS.teleporteur, {
+                titre: "Vers la Salle I", orientation: VERS_PX,
+                destination: { x: -3, y: 0, z: 8 }, regard: { x: -10, z: 10 },
+            })
+            .add(COMPS.position, { x: -12, y: 0, z: -12 });
     }
 
     addBouncingBalls(n) {
